@@ -8,4 +8,9 @@ def solution(x: np.array, y: np.array) -> bool: # Одна или две выб�
     # Измените код этой функции
     # Это будет вашим решением
     # Не меняйте название функции и её аргументы
-    return stats.ttest_ind(x, y)[1] < 0.04
+    alpha = 0.04
+    effect = permutation_test((x, y), lambda x, y, axis: np.mean(x, axis=axis) - np.mean(y, axis=axis), 
+                 vectorized=True, 
+                 n_resamples=5000,
+                 alternative='greater').pvalue < alpha
+    return effect
